@@ -22,7 +22,24 @@ app.get("/hadist", (req, res) => {
   const sql = "SELECT * FROM tb_hadist";
   db.query(sql, (err, data) => {
     if (err) return res.json("Error");
-    return res.json(data);
+
+    // Ubah nilai content menjadi array langsung
+    const parsedData = data.map((item) => {
+      console.log(item);
+      return {
+        ...item,
+        content:
+          item.content !== null
+            ? [
+                {
+                  data: item.content,
+                },
+              ]
+            : null,
+      };
+    });
+
+    return res.json(parsedData);
   });
 });
 
